@@ -1,0 +1,485 @@
+
+<style>
+:root,[data-theme="light"]{
+--bg:#f8f6ef;--bg2:#f0ede4;--bg3:#fff;--tx:#0a0a0a;--tx2:#2e2e2e;--tx3:#666;
+--br:#d4d0c8;--card:#fff;--nav:#0a0a0a;--nav-tx:#f8f6ef;
+--red:#c8000a;--gold:#f5a300;--grn:#1a6e1a;--mut:#888;
+--tick:#1c1c1c;--tag-bg:#f0ede4;--tag-br:#d4d0c8;--tag-tx:#2e2e2e;
+}
+[data-theme="dark"]{
+--bg:#111010;--bg2:#1a1a18;--bg3:#1f1f1d;--tx:#e8e4d8;--tx2:#c8c4b8;--tx3:#888;
+--br:#333;--card:#1f1f1d;--nav:#050505;--nav-tx:#e8e4d8;
+--red:#e03040;--gold:#f5a300;--grn:#2d9c2d;--mut:#666;
+--tick:#0a0a0a;--tag-bg:#1a1a18;--tag-br:#333;--tag-tx:#c8c4b8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'IBM Plex Sans',sans-serif;transition:background .25s,color .25s;-webkit-font-smoothing:antialiased}
+.serif{font-family:'Libre Baskerville',Georgia,serif}
+.mono{font-family:'IBM Plex Mono','Courier New',monospace}
+
+.theme-btn{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--tx);color:var(--bg);border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:background .25s,color .25s;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+
+/* UTIL */
+.util{background:var(--nav);padding:7px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.util-brand{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.14em}
+.util-r{display:flex;gap:20px;align-items:center}
+.util-txt{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#888;letter-spacing:.1em;text-transform:uppercase}
+.util-cta{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.12em;cursor:pointer;background:none;border:none;transition:color .15s}
+.util-cta:hover{color:var(--nav-tx)}
+
+/* MASTHEAD */
+.masthead{background:var(--bg);border-bottom:4px double var(--tx);padding:18px 24px 0;transition:background .25s}
+.mh-row1{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--br);gap:12px}
+.mh-aside{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;min-width:120px}
+.mh-aside.right{text-align:right}
+.mh-title{font-family:'Libre Baskerville',Georgia,serif;font-size:clamp(2.4rem,5.5vw,5rem);font-weight:700;line-height:1;text-align:center;color:var(--tx);flex:1}
+.mh-tagline{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3);letter-spacing:.22em;text-transform:uppercase;padding:9px 0;border-bottom:2px solid var(--tx)}
+.mh-nav{display:flex;border-bottom:1px solid var(--br)}
+.nav-btn{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:9px 18px;color:var(--tx3);cursor:pointer;border:none;border-right:1px solid var(--br);background:none;transition:background .15s,color .15s;white-space:nowrap}
+.nav-btn:hover,.nav-btn.active{background:var(--tx);color:var(--bg)}
+.nav-btn:last-child{border-right:none;margin-left:auto;color:var(--gold)}
+
+/* TICKER */
+.ticker-wrap{background:var(--tick);overflow:hidden;display:flex;padding:7px 0;transition:background .25s}
+.ticker-track{display:flex;white-space:nowrap;animation:scroll 40s linear infinite;font-family:'IBM Plex Mono',monospace;font-size:10px}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ti{display:inline-flex;align-items:center;color:#aaa}
+[data-theme="dark"] .ti{color:#777}
+.ti-sep{color:var(--gold);margin:0 16px;font-weight:700}
+.ti-key{font-weight:700;color:#ddd;margin-right:7px}
+[data-theme="dark"] .ti-key{color:#bbb}
+.ti-up{color:var(--grn)}
+.ti-dn{color:var(--red)}
+
+/* SECTION BAR */
+.secbar{background:var(--bg2);border-bottom:1px solid var(--br);padding:7px 24px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;transition:background .25s}
+.sd{width:5px;height:5px;background:var(--red);display:inline-block;flex-shrink:0}
+.sl{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tx3)}
+
+/* LAYOUT */
+.page{max-width:1440px;margin:0 auto;padding:0 24px}
+.main-grid{display:grid;grid-template-columns:1fr 310px;gap:0;border-bottom:1px solid var(--br)}
+@media(max-width:880px){.main-grid{grid-template-columns:1fr}}
+.col-l{border-right:1px solid var(--br);padding:36px 28px 52px 0}
+@media(max-width:880px){.col-l{border-right:none;padding-right:0}}
+.col-r{padding:36px 0 52px 28px}
+@media(max-width:880px){.col-r{padding-left:0;border-top:1px solid var(--br);padding-top:28px}}
+
+/* HERO */
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--br)}
+.hero-h{font-family:'Libre Baskerville',Georgia,serif;font-size:clamp(1.9rem,3.8vw,3.1rem);font-weight:700;line-height:1.07;color:var(--tx);margin-bottom:16px}
+.hero-lead{font-size:17px;color:var(--tx2);line-height:1.7;margin-bottom:8px;font-weight:600}
+.hero-body{font-size:15px;color:var(--tx3);line-height:1.8;margin-bottom:32px;max-width:580px}
+
+/* CTA STRIP */
+.cta-strip{background:var(--nav);border:2px solid var(--tx);padding:18px 22px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:5px 5px 0 0 var(--red);transition:background .25s,box-shadow .25s}
+.cta-h{font-family:'Libre Baskerville',Georgia,serif;font-size:1.15rem;font-weight:700;color:#f8f6ef;margin-bottom:3px}
+[data-theme="dark"] .cta-h{color:#e8e4d8}
+.cta-m{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#888}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;background:#f8f6ef;color:#0a0a0a;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
+[data-theme="dark"] .btn{background:#e8e4d8;color:#111}
+.btn:hover{background:var(--red);color:#fff}
+[data-theme="dark"] .btn:hover{background:var(--red);color:#fff}
+
+/* SECTION TITLE */
+.s-title{font-family:'Libre Baskerville',Georgia,serif;font-size:1.45rem;font-weight:700;color:var(--tx);margin-bottom:4px}
+.s-rule{border:none;border-top:2px solid var(--tx);margin-bottom:18px}
+.divider{border:none;border-top:1px solid var(--br);margin:32px 0}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0}
+@media(max-width:520px){.skills-grid{grid-template-columns:1fr}}
+.sk-card{background:var(--card);border:1px solid var(--br);padding:14px 16px;transition:background .25s,border-color .15s,box-shadow .15s}
+.sk-card:hover{border-color:var(--tx);box-shadow:2px 2px 0 0 var(--tx)}
+.sk-name{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.sk-name::before{content:'';width:4px;height:4px;background:var(--red);display:inline-block;flex-shrink:0}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--tag-bg);border:1px solid var(--tag-br);color:var(--tag-tx);padding:3px 8px;transition:background .25s}
+
+/* PROJECTS */
+.proj{background:var(--card);border:1px solid var(--br);padding:20px;margin-bottom:14px;transition:background .25s,border-color .15s,box-shadow .15s}
+.proj:hover{border-color:var(--tx);box-shadow:4px 4px 0 0 var(--tx)}
+.proj-num{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--red);text-transform:uppercase;margin-bottom:7px}
+.proj-title{font-family:'Libre Baskerville',Georgia,serif;font-size:1.1rem;font-weight:700;color:var(--tx);margin-bottom:10px}
+.proj-body{font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:12px}
+.proj-impact{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;background:var(--grn);color:#fff;padding:5px 11px}
+[data-theme="dark"] .proj-impact{background:#1a4a1a;color:#86efac}
+
+/* EXPERIENCE */
+.exp{border-top:1px solid var(--br);padding:18px 0}
+.exp:first-child{border-top:2px solid var(--tx)}
+.exp-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.exp-role{font-family:'Libre Baskerville',Georgia,serif;font-size:1rem;font-weight:700;color:var(--tx);margin-bottom:3px}
+.exp-co{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--red);text-transform:uppercase}
+.exp-period{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3);white-space:nowrap}
+.exp-body{font-size:13px;color:var(--tx2);line-height:1.75}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.stat{background:var(--bg2);border:1px solid var(--br);padding:14px;text-align:center;transition:background .25s}
+.stat-n{font-family:'Libre Baskerville',Georgia,serif;font-size:1.7rem;font-weight:700;color:var(--red);line-height:1}
+.stat-l{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;margin-top:5px}
+
+/* SIDEBAR */
+.sb-card{background:var(--nav);padding:22px;margin-bottom:20px;transition:background .25s}
+.sb-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.sb-title{font-family:'Libre Baskerville',Georgia,serif;font-size:1.35rem;font-weight:700;color:var(--nav-tx);margin-bottom:14px;line-height:1.2}
+.sb-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #222;font-family:'IBM Plex Mono',monospace;font-size:10px;gap:8px}
+[data-theme="dark"] .sb-row{border-bottom-color:#2a2a2a}
+.sb-k{color:#777;text-transform:uppercase;letter-spacing:.1em;flex-shrink:0}
+.sb-v{color:var(--nav-tx);font-weight:700;text-align:right}
+.sb-v.live{color:var(--grn);display:flex;align-items:center;gap:5px;justify-content:flex-end}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--grn);animation:p 1.5s infinite;flex-shrink:0}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.sb-cta{display:flex;align-items:center;justify-content:space-between;width:100%;padding:13px 16px;background:#f8f6ef;color:#0a0a0a;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;margin-top:16px;transition:background .15s,color .15s}
+[data-theme="dark"] .sb-cta{background:#e8e4d8;color:#111}
+.sb-cta:hover{background:var(--red);color:#fff}
+
+.mini{background:var(--card);border:1px solid var(--br);padding:14px 16px;margin-bottom:10px;transition:background .25s,border-color .15s}
+.mini:hover{border-color:var(--tx)}
+.mini-t{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--red);margin-bottom:7px}
+.mini-b{font-size:13px;color:var(--tx3);line-height:1.65}
+
+/* DARK SECTION */
+.dark-sec{background:var(--tick);color:var(--nav-tx);padding:48px 24px;transition:background .25s}
+.dark-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #2a2a2a;padding-bottom:18px;margin-bottom:36px;flex-wrap:wrap;gap:12px}
+.dark-title{font-family:'Libre Baskerville',Georgia,serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:var(--nav-tx)}
+.dark-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#666;letter-spacing:.1em;text-transform:uppercase}
+
+/* STACK */
+.stack-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #222}
+@media(max-width:680px){.stack-grid{grid-template-columns:repeat(2,1fr)}}
+.stack-item{border-right:1px solid #222;border-bottom:1px solid #222;padding:18px 12px;text-align:center;transition:background .15s}
+.stack-item:hover{background:#1c1c1c}
+[data-theme="dark"] .stack-item:hover{background:#1a1a18}
+.stack-item:nth-child(4n){border-right:none}
+.si-ico{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px;letter-spacing:-.02em}
+.si-name{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--nav-tx);margin-bottom:2px}
+.si-type{font-size:11px;color:#666}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+@media(max-width:580px){.contact-grid{grid-template-columns:1fr}}
+.contact-item{border:1px solid #2a2a2a;padding:16px;text-align:center;transition:background .15s}
+.contact-item:hover{background:#1c1c1c}
+.c-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.c-val{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--nav-tx);font-weight:700;word-break:break-all;line-height:1.5}
+.c-val a{color:var(--gold);text-decoration:none}
+.c-val a:hover{text-decoration:underline}
+
+/* FOOTER */
+.footer{background:var(--bg2);border-top:4px double var(--tx);padding:28px 24px;transition:background .25s}
+.footer-in{max-width:1440px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center}
+.footer-brand{font-family:'Libre Baskerville',Georgia,serif;font-size:1.1rem;font-weight:700;color:var(--tx)}
+.footer-copy{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase}
+
+.market-bar{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--br)}
+.market-bar::-webkit-scrollbar{display:none}
+.mb-item{display:flex;align-items:center;gap:6px;padding:8px 16px;border-right:1px solid var(--br);white-space:nowrap;flex-shrink:0}
+.mb-name{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:var(--tx)}
+.mb-val{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--tx)}
+.mb-chg{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<div id="root">
+
+<button class="theme-btn" id="themeBtn" title="Toggle theme">&#9788;</button>
+
+<div class="util">
+  <span class="util-brand">&#9670; The Engineer's Ledger</span>
+  <div class="util-r">
+    <span class="util-txt">Frontend Engineer &middot; Open to Work</span>
+    <button class="util-cta" onclick="openLink('mailto:rkkamat2001@gmail.com')">rkkamat2001@gmail.com &#8594;</button>
+  </div>
+</div>
+
+<div class="masthead">
+  <div class="mh-row1">
+    <span class="mh-aside mono">Portfolio &middot;</span>
+    <h1 class="mh-title serif">Rishi Kumar</h1>
+    <span class="mh-aside right mono" id="dateOut"></span>
+  </div>
+  <div class="mh-tagline">Frontend Engineer &nbsp;&bull;&nbsp; React.js &nbsp;&bull;&nbsp; TypeScript &nbsp;&bull;&nbsp; SaaS &nbsp;&bull;&nbsp; Ghaziabad, India</div>
+  <div class="market-bar">
+    <div class="mb-item"><span class="mb-name">EXPERIENCE</span><span class="mb-val">4+ Years</span><span class="mb-chg" style="color:var(--grn)">&#9650; Prod</span></div>
+    <div class="mb-item"><span class="mb-name">EMPLOYER</span><span class="mb-val">Chetu Inc</span><span class="mb-chg" style="color:var(--tx3)">&#8212; Active</span></div>
+    <div class="mb-item"><span class="mb-name">API OPT</span><span class="mb-val">&#8722;30%</span><span class="mb-chg" style="color:var(--grn)">&#9650; Calls</span></div>
+    <div class="mb-item"><span class="mb-name">STACK</span><span class="mb-val">React &middot; TS</span><span class="mb-chg" style="color:var(--tx3)">&#8212; Core</span></div>
+    <div class="mb-item"><span class="mb-name">RBAC</span><span class="mb-val">3 Roles</span><span class="mb-chg" style="color:var(--grn)">&#9650; Built</span></div>
+  </div>
+  <div class="mh-nav">
+    <button class="nav-btn active">Overview</button>
+    <button class="nav-btn" onclick="document.getElementById('skills-sec').scrollIntoView({behavior:'smooth'})">Skills</button>
+    <button class="nav-btn" onclick="document.getElementById('proj-sec').scrollIntoView({behavior:'smooth'})">Projects</button>
+    <button class="nav-btn" onclick="document.getElementById('stack-sec').scrollIntoView({behavior:'smooth'})">Stack</button>
+    <button class="nav-btn" onclick="document.getElementById('contact-sec').scrollIntoView({behavior:'smooth'})">Contact &#8594;</button>
+  </div>
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<div class="secbar">
+  <span class="sd"></span><span class="sl">Work History</span>
+  <span class="sd"></span><span class="sl">Projects</span>
+  <span class="sd"></span><span class="sl">Open Source Stack</span>
+  <span class="sl" style="margin-left:auto">4 Years Experience &middot; Production Grade</span>
+</div>
+
+<div class="page">
+<div class="main-grid">
+
+<div class="col-l">
+  <div class="eyebrow">Product-focused frontend engineer</div>
+  <h2 class="hero-h serif">Building Frontend that perform<br>at production scale.</h2>
+  <p class="hero-lead">4 years architecting scalable, high-performance web applications.</p>
+  <p class="hero-body">Specialized in complex UIs, optimizing data-fetching pipelines, and delivering production-grade SaaS platforms with secure, role-based workflows using React.js and modern JavaScript ecosystems.</p>
+
+  <div class="cta-strip">
+    <div>
+      <div class="cta-h">Available for new opportunities</div>
+      <div class="cta-m mono">React.js &middot; TypeScript &middot; SaaS &middot; Noida / Remote</div>
+    </div>
+    <button class="btn" onclick="document.getElementById('contact-sec').scrollIntoView({behavior:'smooth'})">Get in touch &#8594;</button>
+  </div>
+
+  <div id="skills-sec">
+    <div class="s-title serif">Technical skills</div>
+    <hr class="s-rule">
+    <div class="skills-grid" style="margin-bottom:32px">
+      <div class="sk-card">
+        <div class="sk-name">Frontend</div>
+        <div class="tags"><span class="tag">React.js</span><span class="tag">TypeScript</span><span class="tag">TanStack Start</span><span class="tag">JavaScript ES6+</span><span class="tag">HTML5</span><span class="tag">CSS3</span></div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-name">State &amp; Data</div>
+        <div class="tags"><span class="tag">Redux</span><span class="tag">Zustand</span><span class="tag">TanStack Query</span><span class="tag">Context API</span></div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-name">Styling</div>
+        <div class="tags"><span class="tag">Tailwind CSS</span><span class="tag">Bootstrap</span><span class="tag">Responsive Design</span></div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-name">Backend &amp; Tools</div>
+        <div class="tags"><span class="tag">Convex</span><span class="tag">REST APIs</span><span class="tag">JWT Auth</span><span class="tag">Git</span><span class="tag">JIRA</span><span class="tag">Webpack</span><span class="tag">Code Splitting</span><span class="tag">Lazy Loading</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="proj-sec">
+    <div class="s-title serif">Projects</div>
+    <hr class="s-rule">
+
+    <div class="proj">
+      <div class="proj-num">&#9670; Project 01</div>
+      <div class="proj-title serif">Event &amp; Marketplace Platform</div>
+      <p class="proj-body">Architected the complete frontend using React.js, Tailwind CSS, Redux, and TanStack Query. Engineered secure, complex role-based access control (RBAC) workflows tailored for Clients, Freelancers, and Equipment Lenders.</p>
+      <div class="tags" style="margin-bottom:12px"><span class="tag">React.js</span><span class="tag">Redux</span><span class="tag">TanStack Query</span><span class="tag">Tailwind CSS</span><span class="tag">RBAC</span></div>
+      <div class="proj-impact">&#9650; &#8722;30% redundant API calls via TanStack Query caching</div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-num">&#9670; Project 02</div>
+      <div class="proj-title serif">Veterinary Booking &amp; Service Platform</div>
+      <p class="proj-body">Built a responsive and accessible frontend platform using React.js and Redux. Integrated the Twilio Conversations API to enable seamless, real-time chat functionality between users and service providers.</p>
+      <div class="tags" style="margin-bottom:12px"><span class="tag">React.js</span><span class="tag">Redux</span><span class="tag">Twilio API</span><span class="tag">Real-time Chat</span><span class="tag">Accessibility</span></div>
+      <div class="proj-impact">&#9650; Real-time chat connecting users &amp; providers via Twilio</div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-num">&#9670; Project 03</div>
+      <div class="proj-title serif">Candidate Assessment &amp; Evaluation Platform</div>
+      <p class="proj-body">Developed Dynamic components and complex business logic for candidate assessment and evaluation workflow.</p>
+      <p class="proj-body">Partenered directly with the clients to gather requirements and deliver a seamless user experience.</p>
+
+      <div class="tags" style="margin-bottom:12px"><span class="tag">React.js</span><span class="tag">Redux</span><span class="tag">Twilio API</span><span class="tag">Real-time Chat</span><span class="tag">Accessibility</span></div>
+      <div class="proj-impact">&#9650; Real-time chat connecting users &amp; providers via Twilio</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="s-title serif">Work history</div>
+    <hr class="s-rule">
+    <div class="exp">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Software Developer (Frontend)</div>
+          <div class="exp-co">&#9670; Chetu Inc, Noida</div>
+        </div>
+        <span class="exp-period mono">Feb 2022 &ndash; Present</span>
+      </div>
+      <p class="exp-body">Lead end-to-end frontend development for multiple high-traffic, client-facing applications. Collaborate directly with stakeholders to translate business requirements into technical architecture. Delivered scalable SaaS platforms with role-based access workflows and optimized data-fetching pipelines.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- <div>
+    <div class="s-title serif" style="margin-bottom:6px">By the numbers</div>
+    <p style="font-size:13px;color:var(--tx3);margin-bottom:18px">Verified metrics from 4 years of production frontend work.</p>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-n serif">4+</div><div class="stat-l">Years of Experience</div></div>
+      <div class="stat"><div class="stat-n serif">30%</div><div class="stat-l">API call reduction</div></div>
+      <div class="stat"><div class="stat-n serif">2</div><div class="stat-l">Production platforms</div></div>
+      <div class="stat"><div class="stat-n serif">3</div><div class="stat-l">RBAC roles engineered</div></div>
+    </div>
+  </div> -->
+</div>
+
+<div class="col-r">
+  <div class="sb-card">
+    <div class="sb-tag">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Current Status
+    </div>
+    <div class="sb-title serif">Open to Frontend Roles</div>
+    <div class="sb-row"><span class="sb-k">Role</span><span class="sb-v">Frontend Engineer</span></div>
+    <div class="sb-row"><span class="sb-k">Stack</span><span class="sb-v">React.js &middot; TypeScript</span></div>
+    <div class="sb-row"><span class="sb-k">Experience</span><span class="sb-v">4+ Years</span></div>
+    <div class="sb-row"><span class="sb-k">Location</span><span class="sb-v">Ghaziabad, UP</span></div>
+    <div class="sb-row" style="border-bottom:none"><span class="sb-k">Status</span><span class="sb-v live"><span class="pulse"></span> Active</span></div>
+    <button class="sb-cta" onclick="openLink('https://www.linkedin.com/in/rishi-kumar-bb0abb19b/')">View LinkedIn &#8594;</button>
+  </div>
+  
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-n serif">Now</div>
+      <div class="stat-l">Building Orbit</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n serif">Goal</div>
+      <div class="stat-l">100 users</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="s-title serif" style="font-size:1.05rem;margin-bottom:4px">Quick check</div>
+    <hr style="border:none;border-top:2px solid var(--tx);margin-bottom:12px">
+    <div class="mini">
+      <div class="mini-t">Specialization</div>
+      <div class="mini-b">Complex UI architecture, RBAC systems, and data-fetching optimization with TanStack Query and Redux.</div>
+    </div>
+    <div class="mini">
+      <div class="mini-t">Current employer</div>
+      <div class="mini-b">Chetu Inc, Noida &mdash; full-time since Feb 2022. Client-facing product development across multiple verticals.</div>
+    </div>
+    <div class="mini">
+      <div class="mini-t">Location</div>
+      <div class="mini-b">Ghaziabad, Uttar Pradesh, India. Open to remote and hybrid roles.</div>
+    </div>
+    <div class="mini">
+      <div class="mini-t">Contact</div>
+      <div class="mini-b mono" style="font-size:11px;line-height:1.8">rkkamat2001@gmail.com<br>+91 93183 11442</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<div class="dark-sec" id="stack-sec">
+  <div style="max-width:1440px;margin:0 auto">
+    <div class="dark-header">
+      <div class="dark-title serif">Full tech stack</div>
+      <div class="dark-meta">Production tools used at Chetu Inc and beyond</div>
+    </div>
+    <div class="stack-grid" id="stackGrid"></div>
+  </div>
+</div>
+
+<div class="dark-sec" id="contact-sec" style="padding-top:0">
+  <div style="max-width:1440px;margin:0 auto;border-top:1px solid #2a2a2a;padding-top:40px">
+    <div class="dark-header" style="border-bottom:none;padding-bottom:0;margin-bottom:0">
+      <div>
+        <div class="dark-title serif">Get in touch</div>
+        <div class="dark-meta" style="margin-top:4px">Open to full-time, contract &amp; freelance frontend work</div>
+      </div>
+      <button class="btn" onclick="openLink('mailto:rkkamat2001@gmail.com')">Send email &#8594;</button>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="c-lbl">Email</div>
+        <div class="c-val"><a href="mailto:rkkamat2001@gmail.com">rkkamat2001@gmail.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="c-lbl">Phone</div>
+        <div class="c-val">+91 93183 11442</div>
+      </div>
+      <div class="contact-item">
+        <div class="c-lbl">LinkedIn</div>
+        <div class="c-val"><a href="https://www.linkedin.com/in/rishi-kumar-bb0abb19b/" target="_blank">linkedin.com/in/rishi-kumar</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-in">
+    <span class="footer-brand serif">Rishi Kumar &middot; Frontend Engineer</span>
+    <span class="footer-copy">&#169; 2026 &middot; React.js &middot; TypeScript &middot; Ghaziabad, India</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+document.getElementById('dateOut').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+
+const TICKS=[
+  {k:'STACK',v:'React.js + TypeScript',up:null},
+  {k:'EXPERIENCE',v:'4 YRS PRODUCTION',up:true},
+  {k:'EMPLOYER',v:'Chetu Inc, Noida',up:null},
+  {k:'API-OPT',v:'-30% API CALLS',up:true},
+  {k:'RBAC',v:'3 ROLE TYPES BUILT',up:true},
+  {k:'TWILIO',v:'REAL-TIME CHAT',up:null},
+  {k:'TANSTACK',v:'QUERY + START',up:null},
+  {k:'STATUS',v:'OPEN TO WORK',up:true},
+  {k:'LOCATION',v:'GHAZIABAD, INDIA',up:null},
+  {k:'CONTACT',v:'rkkamat2001@gmail.com',up:null},
+];
+function mkTick(){
+  return TICKS.map(t=>`<span class="ti"><span class="ti-sep">&#9670;</span><span class="ti-key">${t.k}</span><span class="${t.up===true?'ti-up':t.up===false?'ti-dn':''}">${t.v}</span></span>`).join('');
+}
+const tel=document.getElementById('ticker');
+tel.innerHTML=mkTick()+mkTick();
+
+const STACK=[
+  {i:'Re',n:'React.js',t:'UI Framework'},
+  {i:'TS',n:'TypeScript',t:'Language'},
+  {i:'JS',n:'JavaScript',t:'ES6+'},
+  {i:'Rd',n:'Redux',t:'State Mgmt'},
+  {i:'Zu',n:'Zustand',t:'State Mgmt'},
+  {i:'TQ',n:'TanStack Query',t:'Data Fetching'},
+  {i:'Tw',n:'Tailwind CSS',t:'Styling'},
+  {i:'Bs',n:'Bootstrap',t:'Styling'},
+  {i:'Jw',n:'JWT Auth',t:'Security'},
+  {i:'Ap',n:'REST APIs',t:'Integration'},
+  {i:'Tv',n:'Twilio',t:'Realtime API'},
+  {i:'Wp',n:'Webpack',t:'Bundler'},
+  {i:'Gi',n:'Git',t:'Version Control'},
+  {i:'Ji',n:'JIRA',t:'Project Mgmt'},
+  {i:'Lz',n:'Lazy Loading',t:'Performance'},
+  {i:'Cs',n:'Code Splitting',t:'Performance'},
+];
+const sg=document.getElementById('stackGrid');
+STACK.forEach(s=>{
+  sg.innerHTML+=`<div class="stack-item"><div class="si-ico">${s.i}</div><div class="si-name">${s.n}</div><div class="si-type">${s.t}</div></div>`;
+});
+
+let dark=false;
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  dark=!dark;
+  document.getElementById('root').setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('themeBtn').innerHTML=dark?'&#9790;':'&#9788;';
+});
+</script>
